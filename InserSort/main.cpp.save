@@ -1,0 +1,14 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void SimpleInsertSort(vector<int>&a)
+{
+    for()
+}
+
+int main()
+{
+    cout << "Hello world!" << endl;
+    return 0;
+}
