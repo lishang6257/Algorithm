@@ -1,0 +1,168 @@
+#include <iostream>
+using namespace std;
+
+template <typename T>
+struct Node{
+    Node(){
+        next = NULL;
+    }
+    T info;
+    Node<T>* next;
+};
+
+template <typename T>
+class List{
+public:
+    List();
+    List(const List &l);
+    List(const T *a,int n);
+    int Lsize(){return lsize;}
+    void Lsort(int low,int high);//sort method is default,improve it with comparing function
+    void Lreverse();
+    List& Lmerge(const List &l1,const List &l2);
+    T Linsert(T info,int pos);
+    T Ldelete(int pos);
+    /* -----------for test---------- */
+    void Lprint();
+private:
+    Node<T>* sentinel;
+    int lsize;
+};
+
+template <typename T>
+List<T>::List()
+{
+    sentinel = new Node<T>;
+    lsize = 0;
+}
+
+template <typename T>
+List<T>::List(const T *a,int n)
+{
+    sentinel = new Node<T>;
+    Node<T>* t = sentinel;
+    for(int i = 0;i < n;i ++){
+        t->next = new Node<T>;
+        t->next->info = a[i];
+        t = t->next;
+    }
+    lsize = n;
+}
+
+template <typename T>
+void List<T>::Lprint()
+{
+    Node<T>* tmp = sentinel;
+    while(tmp->next){
+        tmp = tmp->next;
+        cout << tmp->info << " ";
+    }
+    cout << endl;
+}
+
+template <typename T>
+T List<T>::Linsert(T info,int pos)
+{
+    if(pos > lsize || pos < 0) return NULL;
+    Node<T>* tmp = sentinel;int cur = 0;
+    while(tmp->next){
+        if(cur == pos){
+            Node<T>* iNode = new Node<T>;
+            iNode->info = info;
+            iNode->next = tmp->next;
+            tmp->next = iNode;
+            lsize ++;
+            return info;
+        }
+        tmp = tmp->next;
+        cur ++;
+        if(cur == lsize){
+            Node<T>* iNode = new Node<T>;
+            iNode->info = info;
+            tmp->next = iNode;
+            lsize ++;
+            return info;
+        }
+    }
+}
+
+template <typename T>
+T List<T>::Ldelete(int pos)
+{
+    if(pos >= lsize || pos < 0) return NULL;
+    Node<T>* tmp = sentinel;int cur = 0;
+    while(tmp->next){
+        if(cur == pos){
+            Node<T>* dNode = tmp->next;
+            tmp->next = tmp->next->next;
+            T dinfo = dNode->info;
+            delete dNode;
+            lsize --;
+            return dinfo;
+        }
+        tmp = tmp->next;
+        cur ++;
+    }
+}
+
+template <typename T>
+void List<T>::Lreverse()
+{
+    if(lsize < 2) return;
+    Node<T>* tmp = sentinel->next;
+    while(tmp->next){
+        Node<T>* mNode = tmp->next;
+        //remove current node from the list
+        tmp->next = mNode->next;
+        //add the removed node behind the sentinel node
+        mNode->next = sentinel->next;
+        sentinel->next = mNode;
+        //roll up
+//        tmp = tmp->next;
+    }
+}
+
+template <typename T>
+void List::Lsort(int low,int high)//insert sort
+{
+    if(low >= high || high >= lsize) return;
+    Node<T>* pLow = sentinel;int cur = 0;
+    //find the position
+    while(pLow->next){
+        if(cur == low) break;
+        pLow = pLow->next;
+        cur ++;
+    }
+//    Node<T>*Low = PLow->next;
+
+    Node<T>* tmp = PLow->next;//high - low > 0,so pLow's next node exists
+    while(tmp->next){
+        //remove tmp->next from the list
+        Node<T>* iNode = tmp->next;
+        tmp->next = tmp->next->next;
+        //add temp->next by order
+        Node<T>* it = pLow;
+        while(iNode->info > it->next->info){
+            it = it->next;
+        }
+        iNode->next = it->next;
+        it->next = iNode;
+    }
+}
+
+//template <typename T>
+//List& List::Lmerge(const List&l1,const List&l2)
+
+int main()
+{
+    List<int>l;
+    int a[5] = {1,2,3,4,5};
+    l.Lprint();
+    List<int>l2(a,5);
+//    l2.Lprint();
+//    l2.Ldelete();
+    l2.Linsert(6,5);
+    l2.Lreverse();
+    l2.Lprint();
+    return 0;
+}
