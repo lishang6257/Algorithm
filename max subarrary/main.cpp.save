@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class result{
+public:
+    result(){
+        low = high = sum = 0;
+    }
+    result(int a,int b,int c):low(a),high(b),sum(c){};
+    operator::>(result a,result b)
+    int low,high,sum;
+};
+
+int Max(int a,int b,int c){
+    if(a >= b && a >= c) return a;
+    if(b >= a && b >= c) return b;
+    return c;
+}
+
+result find_cross_max(vector<int>&a,int low,int high){
+    int mid = (high + low)/2;
+    int sumR = -1000,sumL = -1000;//-INF,这里假设是1000
+    int R = 0,L = 0;
+    int sum = 0;
+    for(int i = mid;i >= low;i --){
+        sum += a[i];
+        if(sum > sumL){
+            sumL = sum;L = i;
+        }
+    }
+    sum = 0;
+    for(int i = mid + 1;i <= high;i ++){
+        sum += a[i];
+        if(sum > sumR){
+            sumR = sum;R = i;
+        }
+    }
+    return result(L,R,sumR+sumL);
+}
+
+result findAmaxsubarray(vector<int>&a ,int low,int high)
+{
+    if(low == high) return result(low,high,a[low]);
+    //分治
+    int mid = (high + low)/2;
+    findAmaxsubarray(a,low,mid);
+    findAmaxsubarray(a,mid+1,high);
+    //跨越两者的数据
+    result M = find_cross_max(a,low,high);
+    
+}
+
+int main()
+{
+    vector<int> a{13,-3,-25,20,-3,-16,-23,18,20,-7,12,-5,-22,15,-4,7};
+
+    cout << "Hello world!" << endl;
+    return 0;
+}
