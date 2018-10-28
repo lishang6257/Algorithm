@@ -142,5 +142,6 @@ int main()
     l2.Linsert(6,4);
     l2.Lreverse();
     l2.Lprint();
+    l2.Lsize();
     return 0;
 }
